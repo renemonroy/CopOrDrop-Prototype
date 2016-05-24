@@ -1,0 +1,72 @@
+{
+  "name": "cop-or-drop",
+  "version": "1.0.0",
+  "description": "A simple prototype to test Tinder/Fancy cards experience with Javascript.",
+  "main": "main.js",
+  "scripts": {
+    "test": "test",
+    "proto": "NODE_ENV=development webpack-dev-server --colors --port 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renemonroy/CopOrDrop-Prototype.git"
+  },
+  "keywords": [
+    "prototype",
+    "react",
+    "motion",
+    "cards",
+    "ux",
+    "ui"
+  ],
+  "author": "René Monroy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/renemonroy/CopOrDrop-Prototype/issues"
+  },
+  "homepage": "https://github.com/renemonroy/CopOrDrop-Prototype#readme",
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.0",
+    "babel-eslint": "^6.0.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-react-display-name": "^6.8.0",
+    "babel-polyfill": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-stage-1": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "babel-runtime": "^6.9.0",
+    "colors": "^1.1.2",
+    "css-loader": "^0.23.1",
+    "eslint": "^2.10.2",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-config-airbnb-base": "^3.0.1",
+    "eslint-plugin-import": "^1.8.0",
+    "eslint-plugin-jsx-a11y": "^1.2.2",
+    "eslint-plugin-react": "^5.1.1",
+    "file-loader": "^0.8.5",
+    "linter-jscs": "^3.4.3",
+    "radium": "^0.17.1",
+    "react-hot-loader": "^1.3.0",
+    "style-loader": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.1.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "lodash": "^4.13.1",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "react-motion": "^0.4.3",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-logger": "^2.6.1",
+    "redux-saga": "^0.10.4"
+  }
+}
