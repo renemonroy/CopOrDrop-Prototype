@@ -1,0 +1,1 @@
+export UISwipeableCards from './SwipeableCards';
