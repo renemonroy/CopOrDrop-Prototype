@@ -6,7 +6,7 @@ class App extends Component {
   static displayName = 'App';
 
   state = {
-    snkrs: [1, 2, 3, 4, 5, 6],
+    snkrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
   };
 
   renderCard(i) {
@@ -23,7 +23,6 @@ class App extends Component {
             cardRenderer={::this.renderCard}
             length={snkrs.length}
             stackSize={4}
-            initialIndex={2}
           />
         </section>
       </div>
