@@ -32,7 +32,7 @@ class UISwipeableCards extends Component {
   }
 
   componentDidMount() {
-    this.next = this.next.bind(this);
+    this.discard = this.discard.bind(this);
   }
 
   componentWillReceiveProps(next) {
@@ -47,8 +47,10 @@ class UISwipeableCards extends Component {
     return { from: fromIndex, size: maxSize };
   }
 
-  next() {
+  discard() {
     const { from, size } = this.state;
+    const ps = this.props;
+    if (ps.onDiscard) ps.onDiscard(from);
     this.setState(this.constrain(from + 1, size, this.props));
   }
 
@@ -83,7 +85,7 @@ class UISwipeableCards extends Component {
         {cards}
         <button
           style={styles.nextButton}
-          onClick={() => this.next()}
+          onClick={() => this.discard()}
         >
           Next
         </button>
