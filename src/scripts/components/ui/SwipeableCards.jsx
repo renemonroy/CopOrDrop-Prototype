@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Radium from 'radium';
 let styles = null;
 
-@Radium
 class UISwipeableCards extends Component {
 
   static displayName = 'UISwipeableCards';
@@ -18,10 +16,11 @@ class UISwipeableCards extends Component {
   };
 
   static defaultProps = {
-    cardRenderer: (i, k) =>
-      <div key={k}>{i}</div>,
+    cardRenderer: (i, k) => <div key={k}>{i}</div>,
     cardsRenderer: (cards, ref, dimStyles) =>
-      <div ref={ref} style={[dimStyles, styles.container]}>{cards}</div>,
+      <div ref={ref} className="ui-swipeable-container" style={dimStyles}>
+        {cards}
+      </div>,
     length: 0,
     stackSize: 3,
     initialIndex: 0,
@@ -37,26 +36,39 @@ class UISwipeableCards extends Component {
     this.state = { from, size };
   }
 
+  componentDidMount() {
+    this.next = this.next.bind(this);
+  }
+
   componentWillReceiveProps(next) {
     const { from, size } = this.state;
     this.setState(this.constrain(from, size, next));
   }
 
-  constrain(from, size, { length, stackSize }) {
-    let maxSize = Math.max(size, stackSize);
-    if (maxSize > length) maxSize = length;
-    const fromIndex = Math.max(Math.min(from, length - maxSize), 0);
+  constrain(from, size, { length }) {
+    const diff = this.props.length - from;
+    const maxSize = size > diff ? diff : size;
+    const fromIndex = Math.max(Math.min(from, length), 0);
     return { from: fromIndex, size: maxSize };
+  }
+
+  next() {
+    const { from, size } = this.state;
+    this.setState(this.constrain(from + 1, size, this.props));
   }
 
   renderCards() {
     const { cardRenderer, cardsRenderer, cardWidth, cardHeight } = this.props;
     const { from, size } = this.state;
+    console.log(this.state);
     const cards = [];
     for (let i = 0; i < size; ++i) {
-      const cardStyl = styles.card;
       cards.unshift(
-        <div style={[cardStyl, cardStyl[`st${i}`]]} key={`snkr-card-${i}`}>
+        <div
+          className="ui-swipeable-card"
+          style={styles.card[`st${i}`]}
+          key={`snkr-card-${from + i}`}
+        >
           {cardRenderer(from + i, i)}
         </div>
       );
@@ -70,6 +82,12 @@ class UISwipeableCards extends Component {
     return (
       <div className="ui-swipeable-cards">
         {cards}
+        <button
+          style={styles.nextButton}
+          onClick={() => this.next()}
+        >
+          Next
+        </button>
       </div>
     );
   }
@@ -77,20 +95,7 @@ class UISwipeableCards extends Component {
 }
 
 styles = {
-  container: {
-    position: 'relative',
-    margin: '0 auto',
-    perspective: '1500px',
-  },
   card: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#e1e1e1',
-    zIndex: 2,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    borderTop: '1px solid #ccc',
     st0: {
       transform: 'scale(1) translateY(2.8rem)',
     },
@@ -106,6 +111,12 @@ styles = {
     st4: {
       transform: 'scale(0.8) translateY(-2.8rem)',
     },
+  },
+  nextButton: {
+    position: 'relative',
+    bottom: '-4rem',
+    left: '50%',
+    marginLeft: '-2.1rem',
   },
 };
 
