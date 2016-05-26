@@ -6,11 +6,28 @@ class App extends Component {
   static displayName = 'App';
 
   state = {
-    snkrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    snkrs: [
+      { id: 1000, name: 'Atomic Pink' },
+      { id: 1001, name: 'Chicago' },
+      { id: 1002, name: 'Bulls' },
+      { id: 1003, name: 'UNC' },
+      { id: 1004, name: 'Birch' },
+      { id: 1005, name: 'Modern Made' },
+      { id: 1006, name: 'OKC Thunder Away Gradient' },
+      { id: 1007, name: 'Vachetta Tan' },
+      { id: 1008, name: 'Carpe Diem' },
+      { id: 1009, name: 'Avar Muse' },
+      { id: 1010, name: 'Television' },
+    ],
   };
 
   renderCard(i) {
-    return this.state.snkrs[i];
+    const { id, name } = this.state.snkrs[i];
+    return (
+      <div className="snkr-card-content" id={`snkr-${id}`}>
+        <p>{name}</p>
+      </div>
+    );
   }
 
   render() {
