@@ -7,7 +7,6 @@ class UISwipeableCards extends Component {
 
   static propTypes = {
     cardRenderer: PropTypes.func.isRequired,
-    cardsRenderer: PropTypes.func.isRequired,
     length: PropTypes.number,
     stackSize: PropTypes.number,
     initialIndex: PropTypes.number,
@@ -17,10 +16,6 @@ class UISwipeableCards extends Component {
 
   static defaultProps = {
     cardRenderer: (i, k) => <div key={k}>{i}</div>,
-    cardsRenderer: (cards, ref, dimStyles) =>
-      <div ref={ref} className="ui-swipeable-container" style={dimStyles}>
-        {cards}
-      </div>,
     length: 0,
     stackSize: 3,
     initialIndex: 0,
@@ -33,7 +28,7 @@ class UISwipeableCards extends Component {
     const { initialIndex, stackSize } = this.props;
     const maxSize = stackSize > 5 ? 5 : stackSize;
     const { from, size } = this.constrain(initialIndex, maxSize, this.props);
-    this.state = { from, size };
+    this.state = { from, size, cardPressed: false };
   }
 
   componentDidMount() {
@@ -58,7 +53,7 @@ class UISwipeableCards extends Component {
   }
 
   renderCards() {
-    const { cardRenderer, cardsRenderer, cardWidth, cardHeight } = this.props;
+    const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size } = this.state;
     console.log(this.state);
     const cards = [];
@@ -74,7 +69,11 @@ class UISwipeableCards extends Component {
       );
     }
     const dimStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
-    return cardsRenderer(cards, c => (this.cards = c), dimStyles);
+    return (
+      <div className="ui-swipeable-container" style={dimStyles}>
+        {cards}
+      </div>
+    );
   }
 
   render() {

@@ -21,6 +21,10 @@ class App extends Component {
     ],
   };
 
+  discardCard(i) {
+    console.log('>>> Snkr discarded:', this.state.snkrs[i]);
+  }
+
   renderCard(i) {
     const { id, name } = this.state.snkrs[i];
     return (
@@ -40,6 +44,7 @@ class App extends Component {
             cardRenderer={::this.renderCard}
             length={snkrs.length}
             stackSize={4}
+            onDiscard={::this.discardCard}
           />
         </section>
       </div>
