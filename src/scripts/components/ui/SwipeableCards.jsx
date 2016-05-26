@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+import { TransitionMotion, spring } from 'react-motion';
+import Radium from 'radium';
 let styles = null;
 
+@Radium
 class UISwipeableCards extends Component {
 
   static displayName = 'UISwipeableCards';
 
   static propTypes = {
     cardRenderer: PropTypes.func.isRequired,
-    cardsRenderer: PropTypes.func.isRequired,
     length: PropTypes.number,
     stackSize: PropTypes.number,
     initialIndex: PropTypes.number,
@@ -17,10 +19,6 @@ class UISwipeableCards extends Component {
 
   static defaultProps = {
     cardRenderer: (i, k) => <div key={k}>{i}</div>,
-    cardsRenderer: (cards, ref, dimStyles) =>
-      <div ref={ref} className="ui-swipeable-container" style={dimStyles}>
-        {cards}
-      </div>,
     length: 0,
     stackSize: 3,
     initialIndex: 0,
@@ -37,7 +35,7 @@ class UISwipeableCards extends Component {
   }
 
   componentDidMount() {
-    this.next = this.next.bind(this);
+    this.discard = this.discard.bind(this);
   }
 
   componentWillReceiveProps(next) {
@@ -52,29 +50,74 @@ class UISwipeableCards extends Component {
     return { from: fromIndex, size: maxSize };
   }
 
-  next() {
+  discard() {
     const { from, size } = this.state;
+    const ps = this.props;
+    if (ps.onDiscard) ps.onDiscard(from);
     this.setState(this.constrain(from + 1, size, this.props));
   }
 
+  getDefaultCardsStyles(cards) {
+    return cards.map(card => ({ ...card, style: { opacity: 1 } }));
+  }
+
+  getCardsStyles(cards) {
+    return cards.map((card, i) => ({
+      key: `snkr-card-${i}`,
+      style: { opacity: spring(1, [236, 24]) },
+    }));
+  }
+
+  cardWillEnter() {
+    return { opacity: 1 };
+  }
+
   renderCards() {
-    const { cardRenderer, cardsRenderer, cardWidth, cardHeight } = this.props;
+    const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size } = this.state;
     console.log(this.state);
     const cards = [];
+    // for (let i = 0; i < size; ++i) {
+    //   cards.unshift(
+    //     <div
+    //       className="ui-swipeable-card"
+    //       style={styles.card[`st${i}`]}
+    //       key={`snkr-card-${from + i}`}
+    //     >
+    //       {cardRenderer(from + i, i)}
+    //     </div>
+    //   );
+    // }
     for (let i = 0; i < size; ++i) {
-      cards.unshift(
-        <div
-          className="ui-swipeable-card"
-          style={styles.card[`st${i}`]}
-          key={`snkr-card-${from + i}`}
-        >
-          {cardRenderer(from + i, i)}
-        </div>
-      );
+      cards.unshift({ key: `snkr-card-${from + i}`, opacity: 1 });
     }
+
+    console.log('cards', cards);
+
     const dimStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
-    return cardsRenderer(cards, c => (this.cards = c), dimStyles);
+    return (
+      <TransitionMotion
+        defaultStyles={this.getDefaultCardsStyles(cards)}
+        styles={this.getCardsStyles(cards)}
+        willEnter={this.cardWillEnter}
+      >
+        {interpolatedStyles =>
+          <div className="ui-swipeable-container" style={dimStyles}>
+            {console.log(interpolatedStyles)}
+            {interpolatedStyles.map((config, i) =>
+              <div
+                key={config.key}
+                id={config.key}
+                style={[...config.style, styles.card[`st${i}`]]}
+                className="ui-swipeable-card"
+              >
+                {cardRenderer(from + i, i)}
+              </div>
+            )}
+          </div>
+        }
+      </TransitionMotion>
+    );
   }
 
   render() {
@@ -83,10 +126,10 @@ class UISwipeableCards extends Component {
       <div className="ui-swipeable-cards">
         {cards}
         <button
-          style={styles.nextButton}
-          onClick={() => this.next()}
+          style={styles.discardButton}
+          onClick={() => this.discard()}
         >
-          Next
+          discard
         </button>
       </div>
     );
@@ -112,7 +155,7 @@ styles = {
       transform: 'scale(0.8) translateY(-2.8rem)',
     },
   },
-  nextButton: {
+  discardButton: {
     position: 'relative',
     bottom: '-4rem',
     left: '50%',
