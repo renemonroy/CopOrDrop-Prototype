@@ -55,7 +55,8 @@ class UISwipeableCards extends Component {
 
   setCardStyles(x, index) {
     if (index === 0) {
-      const transStyle = `translate3d(${x}px, 2.8rem, 0) scale(1)`;
+      const deg = x / 40;
+      const transStyle = `translate3d(${x}px, 2.8rem, 0) scale(1) rotate(${deg}deg)`;
       return { transform: transStyle, WebkitTransform: transStyle };
     }
     return styles.card[`st${index}`];
