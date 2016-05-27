@@ -30,7 +30,7 @@ class UISwipeableCards extends Component {
     const maxSize = stackSize > 5 ? 5 : stackSize;
     const { from, size } = this.constrain(initialIndex, maxSize, this.props);
     this.handleTouchStart = this.handleTouchStart.bind(this);
-    this.state = { from, size, cardPressed: false, delta: 0, mouse: 0, animRest: true };
+    this.state = { from, size, cardPressed: false, delta: 0, mouse: 0, isAnimating: false };
   }
 
   componentDidMount() {
@@ -64,7 +64,7 @@ class UISwipeableCards extends Component {
     const { from, size } = this.state;
     const ps = this.props;
     if (ps.onDiscard) ps.onDiscard(from);
-    this.setState(this.constrain(from + 1, size, this.props));
+    this.setState({ ...this.constrain(from + 1, size, this.props), isAnimating: false });
   }
 
   constrain(from, size, { length }) {
@@ -88,7 +88,6 @@ class UISwipeableCards extends Component {
       delta: pageX - pressX,
       mouse: pressX,
       cardPressed: true,
-      animRest: false,
     });
   }
 
@@ -100,12 +99,12 @@ class UISwipeableCards extends Component {
   }
 
   handleMouseUp() {
-    this.setState({ cardPressed: false, delta: 0 });
+    this.setState({ cardPressed: false, delta: 0, isAnimating: true });
   }
 
   renderCards() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
-    const { from, size, cardPressed, animRest } = this.state;
+    const { from, size, isAnimating } = this.state;
     const cards = [];
     const contStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
     for (let i = 0; i < size; ++i) {
@@ -117,10 +116,10 @@ class UISwipeableCards extends Component {
           <Motion
             style={this.animCard()}
             key={`ui-card-motion-${key}`}
-            onRest={() => this.setState({ animRest: true })}
+            onRest={() => this.setState({ isAnimating: false })}
           >
             {({ x }) => {
-              const uiTrans = cardPressed || animRest ? '' : 'ui-transition';
+              const uiTrans = isAnimating ? '' : 'ui-transition';
               return (
                 <div
                   onMouseDown={this.handleMouseDown.bind(null, x)}
