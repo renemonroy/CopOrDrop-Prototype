@@ -57,23 +57,22 @@ class UISwipeableCards extends Component {
   renderCards() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size } = this.state;
-    console.log(this.state);
     const cards = [];
+    const contStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
     for (let i = 0; i < size; ++i) {
-      cards.unshift(
-        <div
-          className="ui-swipeable-card"
-          style={styles.card[`st${i}`]}
-          key={`snkr-card-${from + i}`}
-        >
-          {cardRenderer(from + i, i)}
-        </div>
-      );
+      cards.unshift({ key: `snkr-card-${from + i}`, index: i });
     }
-    const dimStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
     return (
-      <div className="ui-swipeable-container" style={dimStyles}>
-        {cards}
+      <div className="ui-swipeable-container" style={contStyles}>
+        {cards.map(({ key, index }) =>
+          <div
+            className="ui-swipeable-card"
+            style={styles.card[`st${index}`]}
+            key={key}
+          >
+            {cardRenderer(from + index, index)}
+          </div>
+        )}
       </div>
     );
   }
