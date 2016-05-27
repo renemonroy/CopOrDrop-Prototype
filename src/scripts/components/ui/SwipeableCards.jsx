@@ -88,13 +88,14 @@ class UISwipeableCards extends Component {
       delta: pageX - pressX,
       mouse: pressX,
       cardPressed: true,
+      isAnimating: true,
     });
   }
 
   handleMouseMove({ pageX }) {
     const { cardPressed, delta } = this.state;
     if (cardPressed) {
-      this.setState({ mouse: pageX - delta });
+      this.setState({ mouse: pageX - delta, isAnimating: true });
     }
   }
 
