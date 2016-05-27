@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Motion, spring } from 'react-motion';
 let styles = null;
 
 class UISwipeableCards extends Component {
@@ -28,11 +29,16 @@ class UISwipeableCards extends Component {
     const { initialIndex, stackSize } = this.props;
     const maxSize = stackSize > 5 ? 5 : stackSize;
     const { from, size } = this.constrain(initialIndex, maxSize, this.props);
-    this.state = { from, size, cardPressed: false };
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.state = { from, size, cardPressed: false, delta: 0, mouse: 0, animRest: true };
   }
 
   componentDidMount() {
     this.discard = this.discard.bind(this);
+    window.addEventListener('touchmove', this.handleTouchMove.bind(this));
+    window.addEventListener('touchend', this.handleMouseUp.bind(this));
+    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    window.addEventListener('mouseup', this.handleMouseUp.bind(this));
   }
 
   componentWillReceiveProps(next) {
@@ -40,11 +46,18 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  constrain(from, size, { length }) {
-    const diff = this.props.length - from;
-    const maxSize = size > diff ? diff : size;
-    const fromIndex = Math.max(Math.min(from, length), 0);
-    return { from: fromIndex, size: maxSize };
+  setCardStyles(x, index) {
+    if (index === 0) {
+      const transStyle = `translate3d(${x}px, 2.8rem, 0) scale(1)`;
+      return { transform: transStyle, WebkitTransform: transStyle };
+    }
+    return styles.card[`st${index}`];
+  }
+
+  animCard() {
+    const { cardPressed, mouse } = this.state;
+    const springConfig = { stiffness: 214, damping: 19 };
+    return cardPressed ? { x: mouse } : { x: spring(0, springConfig) };
   }
 
   discard() {
@@ -54,9 +67,45 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from + 1, size, this.props));
   }
 
+  constrain(from, size, { length }) {
+    const diff = this.props.length - from;
+    const maxSize = size > diff ? diff : size;
+    const fromIndex = Math.max(Math.min(from, length), 0);
+    return { from: fromIndex, size: maxSize };
+  }
+
+  handleTouchStart(pressX, e) {
+    this.handleMouseDown(pressX, e.touches[0]);
+  }
+
+  handleTouchMove(e) {
+    e.preventDefault();
+    this.handleMouseMove(e.touches[0]);
+  }
+
+  handleMouseDown(pressX, { pageX }) {
+    this.setState({
+      delta: pageX - pressX,
+      mouse: pressX,
+      cardPressed: true,
+      animRest: false,
+    });
+  }
+
+  handleMouseMove({ pageX }) {
+    const { cardPressed, delta } = this.state;
+    if (cardPressed) {
+      this.setState({ mouse: pageX - delta });
+    }
+  }
+
+  handleMouseUp() {
+    this.setState({ cardPressed: false, delta: 0 });
+  }
+
   renderCards() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
-    const { from, size } = this.state;
+    const { from, size, cardPressed, animRest } = this.state;
     const cards = [];
     const contStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
     for (let i = 0; i < size; ++i) {
@@ -65,13 +114,26 @@ class UISwipeableCards extends Component {
     return (
       <div className="ui-swipeable-container" style={contStyles}>
         {cards.map(({ key, index }) =>
-          <div
-            className="ui-swipeable-card"
-            style={styles.card[`st${index}`]}
-            key={key}
+          <Motion
+            style={this.animCard()}
+            key={`ui-card-motion-${key}`}
+            onRest={() => this.setState({ animRest: true })}
           >
-            {cardRenderer(from + index, index)}
-          </div>
+            {({ x }) => {
+              const uiTrans = cardPressed || animRest ? '' : 'ui-transition';
+              return (
+                <div
+                  onMouseDown={this.handleMouseDown.bind(null, x)}
+                  onTouchStart={this.handleTouchStart.bind(null, x)}
+                  key={key}
+                  className={`ui-swipeable-card ${uiTrans}`}
+                  style={this.setCardStyles(x, index)}
+                >
+                  {cardRenderer(from + index, index)}
+                </div>
+              );
+            }}
+          </Motion>
         )}
       </div>
     );
@@ -96,20 +158,21 @@ class UISwipeableCards extends Component {
 
 styles = {
   card: {
-    st0: {
-      transform: 'scale(1) translateY(2.8rem)',
-    },
     st1: {
-      transform: 'scale(0.95) translateY(1.4rem)',
+      transform: 'translate3d(0, 1.4rem, 0) scale(0.95)',
+      WebkitTransform: 'translate3d(0, 1.4rem, 0) scale(0.95)',
     },
     st2: {
-      transform: 'scale(0.9) translateY(0rem)',
+      transform: 'translate3d(0, 0rem, 0) scale(0.9)',
+      WebkitTransform: 'translate3d(0, 0rem, 0) scale(0.9)',
     },
     st3: {
-      transform: 'scale(0.85) translateY(-1.4rem)',
+      transform: 'translate3d(0, -1.4rem, 0) scale(0.85)',
+      WebkitTransform: 'translate3d(0, -1.4rem, 0) scale(0.85)',
     },
     st4: {
-      transform: 'scale(0.8) translateY(-2.8rem)',
+      transform: 'translate3d(0, -2.8rem, 0) scale(0.8)',
+      WebkitTransform: 'translate3d(0, -2.8rem, 0) scale(0.8)',
     },
   },
   nextButton: {
