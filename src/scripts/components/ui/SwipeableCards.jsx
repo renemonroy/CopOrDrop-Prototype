@@ -197,10 +197,7 @@ class UISwipeableCards extends Component {
             </Motion>
           )}
         </div>
-        <button
-          style={styles.nextButton}
-          onClick={() => this.discard()}
-        >
+        <button style={styles.nextButton} onClick={() => this.discard()}>
           Next
         </button>
       </div>
