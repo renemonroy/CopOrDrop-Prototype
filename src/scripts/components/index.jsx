@@ -25,6 +25,10 @@ class App extends Component {
     console.log('>>> Snkr discarded:', this.state.snkrs[i]);
   }
 
+  acceptCard(i) {
+    console.log('>>> Snkr accepted:', this.state.snkrs[i]);
+  }
+
   renderCard(i) {
     const { id, name } = this.state.snkrs[i];
     return (
@@ -45,6 +49,7 @@ class App extends Component {
             length={snkrs.length}
             stackSize={4}
             onDiscard={::this.discardCard}
+            onAccept={::this.acceptCard}
           />
         </section>
       </div>

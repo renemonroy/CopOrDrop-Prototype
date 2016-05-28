@@ -37,6 +37,8 @@ class UISwipeableCards extends Component {
       delta: 0,
       mouse: 0,
       isAnimating: false,
+      limit: 160,
+      decision: 0,
     };
   }
 
@@ -53,19 +55,43 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  setCardStyles(x, index) {
+  setCardStyles(x, opacity, index) {
+    const { decision, limit, cardPressed } = this.state;
     if (index === 0) {
-      const deg = x / 40;
-      const transStyle = `translate3d(${x}px, 2.8rem, 0) scale(1) rotate(${deg}deg)`;
-      return { transform: transStyle, WebkitTransform: transStyle };
+      let deg = x / 40;
+      let val = x;
+      let o = opacity;
+      if (decision !== 0) {
+        if (cardPressed === false) {
+          val = 0;
+          o = 1;
+          deg = 0;
+        } else {
+          val = (limit * decision * 2);
+        }
+      }
+      const transStyle = `translate3d(${val}px, 2.8rem, 0) scale(1) rotate(${deg}deg)`;
+      return {
+        transform: transStyle,
+        WebkitTransform: transStyle,
+        opacity: o,
+      };
     }
     return styles.card[`st${index}`];
   }
 
   animCard() {
-    const { cardPressed, mouse } = this.state;
+    const { cardPressed, mouse, decision } = this.state;
     const springConfig = { stiffness: 300, damping: 20 };
-    return cardPressed ? { x: mouse } : { x: spring(0, springConfig) };
+    let config = null;
+    if (cardPressed) {
+      config = { x: mouse, opacity: spring(0.9, springConfig) };
+    } else if (decision !== 0) {
+      config = { x: spring(0, springConfig), opacity: 0 };
+    } else {
+      config = { x: 0, opacity: 1 };
+    }
+    return config;
   }
 
   discard() {
@@ -75,6 +101,20 @@ class UISwipeableCards extends Component {
     this.setState({
       ...this.constrain(from + 1, size, this.props),
       isAnimating: false,
+      decision: 0,
+      cardPressed: false,
+    });
+  }
+
+  accept() {
+    const { from, size } = this.state;
+    const ps = this.props;
+    if (ps.onAccept) ps.onAccept(from);
+    this.setState({
+      ...this.constrain(from + 1, size, this.props),
+      isAnimating: false,
+      decision: 0,
+      cardPressed: false,
     });
   }
 
@@ -111,7 +151,18 @@ class UISwipeableCards extends Component {
   }
 
   handleMouseUp() {
-    this.setState({ cardPressed: false, delta: 0, isAnimating: true });
+    const { mouse, limit } = this.state;
+    if (mouse >= limit) {
+      this.setState({ cardPressed: true, delta: 0, decision: 1, isAnimating: true },
+        () => this.accept()
+      );
+    } else if (mouse <= -limit) {
+      this.setState({ cardPressed: true, delta: 0, decision: -1, isAnimating: true },
+        () => this.discard()
+      );
+    } else {
+      this.setState({ cardPressed: false, delta: 0, decision: 0, isAnimating: true });
+    }
   }
 
   render() {
@@ -131,13 +182,13 @@ class UISwipeableCards extends Component {
               key={`ui-card-motion-${key}`}
               onRest={() => this.setState({ isAnimating: false })}
             >
-              {({ x }) =>
+              {({ x, opacity }) =>
                 <div
                   onMouseDown={this.handleMouseDown.bind(null, x)}
                   onTouchStart={this.handleTouchStart.bind(null, x)}
                   key={key}
                   className={`ui-swipeable-card ${isAnimating ? '' : 'ui-transition'}`}
-                  style={this.setCardStyles(x, index)}
+                  style={this.setCardStyles(x, opacity, index)}
                 >
                   {cardRenderer(from + index, index)}
                 </div>
