@@ -81,7 +81,7 @@ class UISwipeableCards extends Component {
   }
 
   animCard() {
-    const { cardPressed, mouse, decision } = this.state;
+    const { cardPressed, mouse, decision, isAnimating } = this.state;
     const springConfig = { stiffness: 300, damping: 20 };
     let config = null;
     if (cardPressed) {
@@ -89,7 +89,7 @@ class UISwipeableCards extends Component {
     } else if (decision !== 0) {
       config = { x: spring(0, springConfig), opacity: 0 };
     } else {
-      config = { x: 0, opacity: 1 };
+      config = { x: isAnimating ? spring(0, springConfig) : 0, opacity: 1 };
     }
     return config;
   }
