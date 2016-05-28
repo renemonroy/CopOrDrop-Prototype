@@ -30,6 +30,7 @@ class UISwipeableCards extends Component {
     const maxSize = stackSize > 5 ? 5 : stackSize;
     const { from, size } = this.constrain(initialIndex, maxSize, this.props);
     this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
     this.state = {
       from,
       size,
