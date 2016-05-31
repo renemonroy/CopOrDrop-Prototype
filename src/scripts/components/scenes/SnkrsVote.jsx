@@ -1,51 +1,49 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { UISwipeableCards } from '../ui';
+import { connect } from 'react-redux';
 
+@connect(state => ({
+  snkrs: state.Snkrs.toJS(),
+}))
 class SnkrsVoteScene extends Component {
 
   static displayName = 'SnkrsVoteScene';
 
-  state = {
-    snkrs: [
-      { id: 1000, name: 'Atomic Pink' },
-      { id: 1001, name: 'Chicago' },
-      { id: 1002, name: 'Bulls' },
-      { id: 1003, name: 'UNC' },
-      { id: 1004, name: 'Birch' },
-      { id: 1005, name: 'Modern Made' },
-      { id: 1006, name: 'OKC Thunder Away Gradient' },
-      { id: 1007, name: 'Vachetta Tan' },
-      { id: 1008, name: 'Carpe Diem' },
-      { id: 1009, name: 'Avar Muse' },
-      { id: 1010, name: 'Television' },
-    ],
+  static propTypes = {
+    snkrs: PropTypes.object.isRequired,
   };
 
+  static defaultProps = {
+    snkrs: {},
+  }
+
   discardCard(i) {
-    console.log('>>> Snkr discarded:', this.state.snkrs[i]);
+    console.log('>>> Snkr discarded:', this.snkrs[i]);
   }
 
   acceptCard(i) {
-    console.log('>>> Snkr accepted:', this.state.snkrs[i]);
+    console.log('>>> Snkr accepted:', this.snkrs[i]);
   }
 
   renderCard(i) {
-    const { id, name } = this.state.snkrs[i];
+    const { id, title } = this.snkrs[i];
     return (
       <div className="snkr-card-content" id={`snkr-${id}`}>
-        <p>{name}</p>
+        <p>{title}</p>
       </div>
     );
   }
 
   render() {
-    const { snkrs } = this.state;
+    const { snkrs } = this.props;
+    this.snkrs = _.map(snkrs, (val, k) => ({ ...val, id: parseInt(k, 10) }));
     return (
       <section>
         <p>Vote</p>
         <UISwipeableCards
           cardRenderer={::this.renderCard}
-          length={snkrs.length}
+          length={this.snkrs.length}
           stackSize={4}
           onDiscard={::this.discardCard}
           onAccept={::this.acceptCard}
