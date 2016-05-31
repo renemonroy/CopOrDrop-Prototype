@@ -21,8 +21,8 @@ class UISwipeableCards extends Component {
     length: 0,
     stackSize: 3,
     initialIndex: 0,
-    cardWidth: 24,
-    cardHeight: 32,
+    cardWidth: 320,
+    cardHeight: 480,
   }
 
   constructor(props) {
@@ -76,7 +76,7 @@ class UISwipeableCards extends Component {
         val = 0;
         opac = 1;
     }
-    const transStyle = `translate3d(${val}px, 2.8rem, 0) scale(1) rotate(${deg}deg)`;
+    const transStyle = `translate3d(${val}px, 40px, 0) scale(1) rotate(${deg}deg)`;
     return {
       transform: transStyle,
       WebkitTransform: transStyle,
@@ -187,7 +187,7 @@ class UISwipeableCards extends Component {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size, condition } = this.state;
     const cards = [];
-    const contStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
+    const contStyles = { width: `${cardWidth}px`, height: `${cardHeight}px` };
     const cs = styles.card;
     for (let i = 0; i < size; i++) {
       cards.unshift({ key: `snkr-card-${from + i}`, index: i });
@@ -215,7 +215,7 @@ class UISwipeableCards extends Component {
             </Motion>
           )}
         </div>
-        <button style={styles.nextButton} onClick={() => { this.discard(); }}>
+        <button style={styles.nextButton} onClick={() => { console.log('>>> clicked!!!'); }}>
           Next
         </button>
       </div>
@@ -227,20 +227,20 @@ class UISwipeableCards extends Component {
 styles = {
   card: {
     st1: {
-      transform: 'translate3d(0, 1.4rem, 0) scale(0.95)',
-      WebkitTransform: 'translate3d(0, 1.4rem, 0) scale(0.95)',
+      transform: 'translate3d(0, 20px, 0) scale(0.95)',
+      WebkitTransform: 'translate3d(0, 20px, 0) scale(0.95)',
     },
     st2: {
-      transform: 'translate3d(0, 0rem, 0) scale(0.9)',
-      WebkitTransform: 'translate3d(0, 0rem, 0) scale(0.9)',
+      transform: 'translate3d(0, 0px, 0) scale(0.9)',
+      WebkitTransform: 'translate3d(0, 0px, 0) scale(0.9)',
     },
     st3: {
-      transform: 'translate3d(0, -1.4rem, 0) scale(0.85)',
-      WebkitTransform: 'translate3d(0, -1.4rem, 0) scale(0.85)',
+      transform: 'translate3d(0, -20px, 0) scale(0.85)',
+      WebkitTransform: 'translate3d(0, -20px, 0) scale(0.85)',
     },
     st4: {
-      transform: 'translate3d(0, -2.8rem, 0) scale(0.8)',
-      WebkitTransform: 'translate3d(0, -2.8rem, 0) scale(0.8)',
+      transform: 'translate3d(0, -40px, 0) scale(0.8)',
+      WebkitTransform: 'translate3d(0, -40px, 0) scale(0.8)',
     },
   },
   nextButton: {
