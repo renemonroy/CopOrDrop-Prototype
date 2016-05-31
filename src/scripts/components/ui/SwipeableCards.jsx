@@ -34,12 +34,11 @@ class UISwipeableCards extends Component {
     this.state = {
       from,
       size,
-      cardPressed: false,
       delta: 0,
       mouse: 0,
-      isAnimating: false,
       limit: 160,
       decision: 0,
+      condition: 0, // default: 0, isCancelling: 1, isDragging: 2, isLeaving: 3
     };
   }
 
@@ -56,66 +55,76 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  setCardStyles(x, opacity, index) {
-    const { decision, limit, cardPressed } = this.state;
-    if (index === 0) {
-      let deg = x / 40;
-      let val = x;
-      let o = opacity;
-      if (decision !== 0) {
-        if (cardPressed === false) {
-          val = 0;
-          o = 1;
-          deg = 0;
-        } else {
-          val = (limit * decision * 2);
-        }
-      }
-      const transStyle = `translate3d(${val}px, 2.8rem, 0) scale(1) rotate(${deg}deg)`;
-      return {
-        transform: transStyle,
-        WebkitTransform: transStyle,
-        opacity: o,
-      };
+  getCardStyles(x, opacity) {
+    const { limit, condition } = this.state;
+    let deg = 0;
+    let val = x;
+    let opac = opacity;
+    switch (condition) {
+      case 1:
+        opac = 1;
+        break;
+      case 2:
+        deg = val / 40;
+        break;
+      case 3:
+        val = -(limit * 2);
+        break;
+      default:
+        val = 0;
+        opac = 1;
     }
-    return styles.card[`st${index}`];
+    const transStyle = `translate3d(${val}px, 2.8rem, 0) scale(1) rotate(${deg}deg)`;
+    return {
+      transform: transStyle,
+      WebkitTransform: transStyle,
+      opacity: opac,
+    };
   }
 
   animCard() {
-    const { cardPressed, mouse, decision, isAnimating } = this.state;
+    const { mouse, condition } = this.state;
     const springConfig = { stiffness: 300, damping: 20 };
-    let config = null;
-    if (cardPressed) {
-      config = { x: mouse, opacity: spring(0.9, springConfig) };
-    } else if (decision !== 0) {
-      config = { x: spring(0, springConfig), opacity: 0 };
-    } else {
-      config = { x: isAnimating ? spring(0, springConfig) : 0, opacity: 1 };
+    switch (condition) {
+      case 2:
+        return { x: mouse, opacity: spring(0.9, springConfig) };
+      case 3:
+        return { x: spring(0, springConfig), opacity: 0 };
+      default:
+        return { x: spring(0, springConfig), opacity: 1 };
     }
-    return config;
   }
 
   discard() {
     const { from, size } = this.state;
     const ps = this.props;
     if (ps.onDiscard) ps.onDiscard(from);
-    this.setState({
-      ...this.constrain(from + 1, size, this.props),
-      isAnimating: false,
-      decision: 0,
-      cardPressed: false,
-    });
+    this.restart(from + 1, size);
   }
 
   accept() {
     const { from, size } = this.state;
     const ps = this.props;
     if (ps.onAccept) ps.onAccept(from);
+    this.restart(from + 1, size);
+  }
+
+  decide() {
+    const { mouse, limit } = this.state;
+    if (mouse >= limit) {
+      this.setState({ condition: 3, delta: 0, decision: 1 }, ::this.accept);
+    } else if (mouse <= -limit) {
+      this.setState({ condition: 3, delta: 0, decision: -1 }, ::this.discard);
+    } else {
+      this.setState({ condition: 1, delta: 0, decision: 0 });
+    }
+  }
+
+  restart(from, size) {
     this.setState({
-      ...this.constrain(from + 1, size, this.props),
-      isAnimating: false,
+      ...this.constrain(from, size, this.props),
       decision: 0,
-      cardPressed: false,
+      condition: 0,
     });
   }
 
@@ -139,38 +148,25 @@ class UISwipeableCards extends Component {
     this.setState({
       delta: pageX - pressX,
       mouse: pressX,
-      cardPressed: true,
-      isAnimating: true,
+      condition: 2,
     });
   }
 
   handleMouseMove({ pageX }) {
-    const { cardPressed, delta } = this.state;
-    if (cardPressed) {
-      this.setState({ mouse: pageX - delta, isAnimating: true });
-    }
+    const { condition, delta } = this.state;
+    if (condition === 2) this.setState({ mouse: pageX - delta });
   }
 
   handleMouseUp() {
-    const { mouse, limit } = this.state;
-    if (mouse >= limit) {
-      this.setState({ cardPressed: true, delta: 0, decision: 1, isAnimating: true },
-        () => this.accept()
-      );
-    } else if (mouse <= -limit) {
-      this.setState({ cardPressed: true, delta: 0, decision: -1, isAnimating: true },
-        () => this.discard()
-      );
-    } else {
-      this.setState({ cardPressed: false, delta: 0, decision: 0, isAnimating: true });
-    }
+    this.decide();
   }
 
   render() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
-    const { from, size, isAnimating } = this.state;
+    const { from, size, condition } = this.state;
     const cards = [];
     const contStyles = { width: `${cardWidth}rem`, height: `${cardHeight}rem` };
+    const cs = styles.card;
     for (let i = 0; i < size; i++) {
       cards.unshift({ key: `snkr-card-${from + i}`, index: i });
     }
@@ -181,15 +177,14 @@ class UISwipeableCards extends Component {
             <Motion
               style={this.animCard()}
               key={`ui-card-motion-${key}`}
-              onRest={() => this.setState({ isAnimating: false })}
             >
               {({ x, opacity }) =>
                 <div
                   onMouseDown={this.handleMouseDown.bind(null, x)}
                   onTouchStart={this.handleTouchStart.bind(null, x)}
                   key={key}
-                  className={`ui-swipeable-card ${isAnimating ? '' : 'ui-transition'}`}
-                  style={this.setCardStyles(x, opacity, index)}
+                  className={`ui-swipeable-card${condition !== 0 ? '' : ' ui-transition'}`}
+                  style={index === 0 ? this.getCardStyles(x, opacity) : cs[`st${index}`]}
                 >
                   {cardRenderer(from + index, index)}
                 </div>
@@ -197,7 +192,7 @@ class UISwipeableCards extends Component {
             </Motion>
           )}
         </div>
-        <button style={styles.nextButton} onClick={() => this.discard()}>
+        <button style={styles.nextButton} onClick={() => { this.discard(); }}>
           Next
         </button>
       </div>
