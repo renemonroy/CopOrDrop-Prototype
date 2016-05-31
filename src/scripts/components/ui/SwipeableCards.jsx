@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Motion, spring } from 'react-motion';
+import { fastEaseOutElastic } from '../../constants/SpringPresets';
 let styles = null;
 
 class UISwipeableCards extends Component {
@@ -85,16 +86,15 @@ class UISwipeableCards extends Component {
 
   animCard() {
     const { mouse, condition } = this.state;
-    const springConfig = { stiffness: 300, damping: 20 };
     switch (condition) {
       case 1:
-        return { x: spring(0, springConfig), opacity: spring(1) };
+        return { x: spring(0, fastEaseOutElastic), opacity: spring(1) };
       case 2:
         return { x: mouse, opacity: spring(0.8) };
       case 3:
-        return { x: spring(0, springConfig), opacity: 0 };
+        return { x: spring(0, fastEaseOutElastic), opacity: 0 };
       default:
-        return { x: spring(0, springConfig), opacity: 1 };
+        return { x: spring(0, fastEaseOutElastic), opacity: 1 };
     }
   }
 
