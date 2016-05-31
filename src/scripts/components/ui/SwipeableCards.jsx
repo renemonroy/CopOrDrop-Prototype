@@ -29,8 +29,11 @@ class UISwipeableCards extends Component {
     const { initialIndex, stackSize } = this.props;
     const maxSize = stackSize > 5 ? 5 : stackSize;
     const { from, size } = this.constrain(initialIndex, maxSize, this.props);
-    this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
     this.state = {
       from,
       size,
@@ -43,11 +46,9 @@ class UISwipeableCards extends Component {
   }
 
   componentDidMount() {
+    this.shouldRemoveEvents = false;
     this.discard = this.discard.bind(this);
-    window.addEventListener('touchmove', this.handleTouchMove.bind(this));
-    window.addEventListener('touchend', this.handleMouseUp.bind(this));
-    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    window.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    this.addEvents();
   }
 
   componentWillReceiveProps(next) {
@@ -62,6 +63,7 @@ class UISwipeableCards extends Component {
     let opac = opacity;
     switch (condition) {
       case 1:
+        deg = val / 40;
         opac = 1;
         break;
       case 2:
@@ -125,7 +127,7 @@ class UISwipeableCards extends Component {
       ...this.constrain(from, size, this.props),
       decision: 0,
       condition: 0,
-    });
+    }, () => { if (this.shouldRemoveEvents === true) this.removeEvents(); });
   }
 
   constrain(from, size, { length }) {
@@ -135,8 +137,22 @@ class UISwipeableCards extends Component {
     return { from: fromIndex, size: maxSize };
   }
 
-  handleTouchStart(pressX, e) {
-    this.handleMouseDown(pressX, e.touches[0]);
+  addEvents() {
+    window.addEventListener('touchmove', this.handleTouchMove);
+    window.addEventListener('touchend', this.handleMouseUp);
+    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('mouseup', this.handleMouseUp);
+  }
+
+  removeEvents() {
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('touchend', this.handleMouseUp);
+    window.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
+  handleTouchStart(pressX, i, e) {
+    this.handleMouseDown(pressX, i, e.touches[0]);
   }
 
   handleTouchMove(e) {
@@ -144,7 +160,10 @@ class UISwipeableCards extends Component {
     this.handleMouseMove(e.touches[0]);
   }
 
-  handleMouseDown(pressX, { pageX }) {
+  handleMouseDown(pressX, i, { pageX }) {
+    if (i === this.lastIndex) {
+      this.shouldRemoveEvents = true;
+    }
     this.setState({
       delta: pageX - pressX,
       mouse: pressX,
@@ -170,6 +189,7 @@ class UISwipeableCards extends Component {
     for (let i = 0; i < size; i++) {
       cards.unshift({ key: `snkr-card-${from + i}`, index: i });
     }
+    this.lastIndex = size - 1;
     return (
       <div className="ui-swipeable-cards">
         <div className="ui-swipeable-container" style={contStyles}>
@@ -180,8 +200,8 @@ class UISwipeableCards extends Component {
             >
               {({ x, opacity }) =>
                 <div
-                  onMouseDown={this.handleMouseDown.bind(null, x)}
-                  onTouchStart={this.handleTouchStart.bind(null, x)}
+                  onMouseDown={this.handleMouseDown.bind(null, x, index)}
+                  onTouchStart={this.handleTouchStart.bind(null, x, index)}
                   key={key}
                   className={`ui-swipeable-card${condition !== 0 ? '' : ' ui-transition'}`}
                   style={index === 0 ? this.getCardStyles(x, opacity) : cs[`st${index}`]}
