@@ -37,16 +37,21 @@ class SnkrsVoteScene extends Component {
 
   render() {
     const { snkrs } = this.props;
+    const ratio = window.innerWidth / window.innerHeight;
+    const cardWidth = window.innerWidth - 40; // 20px of padding in both sides
+    const cardHeight = (cardWidth / ratio) * 0.75;
     this.snkrs = _.map(snkrs, (val, k) => ({ ...val, id: parseInt(k, 10) }));
     return (
       <section>
         <p>Vote</p>
         <UISwipeableCards
-          cardRenderer={::this.renderCard}
+          cardWidth={cardWidth}
+          cardHeight={cardHeight}
           length={this.snkrs.length}
           stackSize={4}
           onDiscard={::this.discardCard}
           onAccept={::this.acceptCard}
+          cardRenderer={::this.renderCard}
         />
       </section>
     );
