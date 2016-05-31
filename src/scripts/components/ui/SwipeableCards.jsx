@@ -64,7 +64,6 @@ class UISwipeableCards extends Component {
     switch (condition) {
       case 1:
         deg = val / 40;
-        opac = 1;
         break;
       case 2:
         deg = val / 40;
@@ -88,8 +87,10 @@ class UISwipeableCards extends Component {
     const { mouse, condition } = this.state;
     const springConfig = { stiffness: 300, damping: 20 };
     switch (condition) {
+      case 1:
+        return { x: spring(0, springConfig), opacity: spring(1) };
       case 2:
-        return { x: mouse, opacity: spring(0.9, springConfig) };
+        return { x: mouse, opacity: spring(0.8) };
       case 3:
         return { x: spring(0, springConfig), opacity: 0 };
       default:
@@ -127,7 +128,9 @@ class UISwipeableCards extends Component {
       ...this.constrain(from, size, this.props),
       decision: 0,
       condition: 0,
-    }, () => { if (this.shouldRemoveEvents === true) this.removeEvents(); });
+    }, () => {
+      if (this.shouldRemoveEvents === true) this.removeEvents();
+    });
   }
 
   constrain(from, size, { length }) {
