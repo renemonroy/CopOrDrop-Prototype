@@ -155,6 +155,19 @@ class UISwipeableCards extends Component {
     });
   }
 
+  renderNavigation() {
+    return (
+      <div className="ui-swipeable-navigation">
+        <button className="discard-button" onClick={::this.handleDiscardClick}>
+          Discard
+        </button>
+        <button className="accept-button" onClick={::this.handleAcceptClick}>
+          Accept
+        </button>
+      </div>
+    );
+  }
+
   render() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size, condition } = this.state;
@@ -188,12 +201,7 @@ class UISwipeableCards extends Component {
             </Motion>
           )}
         </div>
-        <button className="discard-button" onClick={::this.handleDiscardClick}>
-          Discard
-        </button>
-        <button className="accept-button" onClick={::this.handleAcceptClick}>
-          Accept
-        </button>
+        {cards.length > 0 ? this.renderNavigation() : null}
       </div>
     );
   }
