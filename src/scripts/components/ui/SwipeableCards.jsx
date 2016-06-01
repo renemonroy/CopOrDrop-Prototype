@@ -176,8 +176,11 @@ class UISwipeableCards extends Component {
             </Motion>
           )}
         </div>
-        <button style={styles.nextButton} onClick={() => { this.discard(); }}>
-          Next
+        <button className="discard-button" onClick={::this.handleDiscardClick}>
+          Discard
+        </button>
+        <button className="accept-button" onClick={::this.handleAcceptClick}>
+          Accept
         </button>
       </div>
     );
@@ -203,12 +206,6 @@ styles = {
       transform: 'translate3d(0, -40px, 0) scale(0.8)',
       WebkitTransform: 'translate3d(0, -40px, 0) scale(0.8)',
     },
-  },
-  nextButton: {
-    position: 'relative',
-    bottom: '-4rem',
-    left: '50%',
-    marginLeft: '-2.1rem',
   },
 };
 
