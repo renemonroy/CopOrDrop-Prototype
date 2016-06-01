@@ -27,9 +27,10 @@ class SnkrsVoteScene extends Component {
   }
 
   renderCard(i) {
-    const { id, title } = this.snkrs[i];
+    const { id, title, assets } = this.snkrs[i];
     return (
       <div className="snkr-card-content" id={`snkr-${id}`}>
+        <img src={assets.default} role="presentation" />
         <p>{title}</p>
       </div>
     );

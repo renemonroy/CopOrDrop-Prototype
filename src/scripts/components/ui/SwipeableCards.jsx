@@ -77,7 +77,7 @@ class UISwipeableCards extends Component {
       case 1:
         return { x: spring(0, fastEaseOutElastic), opacity: spring(1) };
       case 2:
-        return { x: mouse, opacity: spring(0.8) };
+        return { x: mouse, opacity: spring(0.9) };
       case 3:
         return { x: spring(0, easeOut), opacity: 0 };
       default:

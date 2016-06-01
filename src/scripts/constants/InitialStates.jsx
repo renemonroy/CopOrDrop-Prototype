@@ -6,8 +6,7 @@ export const Snkrs = fromJS({
     subtitle: 'JORDAN HORIZON',
     price: 185,
     assets: {
-      default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+1',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+1',
+      default: 'https://cloud.githubusercontent.com/assets/106011/15694814/94bcd1bc-2766-11e6-9011-0f0edae7dce5.jpg',
     },
   },
   1120: {
@@ -15,8 +14,7 @@ export const Snkrs = fromJS({
     subtitle: 'KD 8 ELITE',
     price: 200,
     assets: {
-      default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+2',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+2',
+      default: 'https://cloud.githubusercontent.com/assets/106011/15694823/9bdb1dfa-2766-11e6-8d02-80fb57912f46.jpg',
     },
   },
   1459: {
@@ -24,8 +22,7 @@ export const Snkrs = fromJS({
     subtitle: 'KOBE 11 GS',
     price: 135,
     assets: {
-      default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+3',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+3',
+      default: 'https://cloud.githubusercontent.com/assets/106011/15694826/a480f524-2766-11e6-95df-afbff18be17f.jpg',
     },
   },
   1793: {
@@ -33,8 +30,7 @@ export const Snkrs = fromJS({
     subtitle: 'KYRIE 2',
     price: 120,
     assets: {
-      default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+4',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+4',
+      default: 'https://cloud.githubusercontent.com/assets/106011/15694829/ac20ab6c-2766-11e6-9f61-6dcdbb7cdc2e.jpg',
     },
   },
   2025: {
@@ -42,8 +38,7 @@ export const Snkrs = fromJS({
     subtitle: 'LEBRON 13',
     price: 200,
     assets: {
-      default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+5',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+5',
+      default: 'https://cloud.githubusercontent.com/assets/106011/15694832/b1abc134-2766-11e6-98ed-cad8d8ab4cd9.jpg',
     },
   },
   2204: {
@@ -52,7 +47,6 @@ export const Snkrs = fromJS({
     price: 130,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+6',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+6',
     },
   },
   2690: {
@@ -61,7 +55,6 @@ export const Snkrs = fromJS({
     price: 175,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+7',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+7',
     },
   },
   2977: {
@@ -70,7 +63,6 @@ export const Snkrs = fromJS({
     price: 200,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+8',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+8',
     },
   },
   3081: {
@@ -79,7 +71,6 @@ export const Snkrs = fromJS({
     price: 120,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+9',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+9',
     },
   },
   3198: {
@@ -88,7 +79,6 @@ export const Snkrs = fromJS({
     price: 200,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+10',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+10',
     },
   },
   3207: {
@@ -97,7 +87,6 @@ export const Snkrs = fromJS({
     price: 140,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+11',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+11',
     },
   },
   3613: {
@@ -106,7 +95,6 @@ export const Snkrs = fromJS({
     price: 150,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+12',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+12',
     },
   },
   3899: {
@@ -115,7 +103,6 @@ export const Snkrs = fromJS({
     price: 200,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+13',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+13',
     },
   },
   4153: {
@@ -124,7 +111,6 @@ export const Snkrs = fromJS({
     price: 160,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+14',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+14',
     },
   },
   4302: {
@@ -133,7 +119,6 @@ export const Snkrs = fromJS({
     price: 120,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+15',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+15',
     },
   },
   4806: {
@@ -142,7 +127,6 @@ export const Snkrs = fromJS({
     price: 200,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+16',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+16',
     },
   },
   4999: {
@@ -151,7 +135,6 @@ export const Snkrs = fromJS({
     price: 110,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+17',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+17',
     },
   },
   5014: {
@@ -160,7 +143,6 @@ export const Snkrs = fromJS({
     price: 130,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+18',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+18',
     },
   },
   5238: {
@@ -169,7 +151,6 @@ export const Snkrs = fromJS({
     price: 200,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+19',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+19',
     },
   },
   5493: {
@@ -178,7 +159,6 @@ export const Snkrs = fromJS({
     price: 200,
     assets: {
       default: 'http://dummyimage.com/600x400/ffffff/222.jpg&text=Snrk+20',
-      thumb: 'http://dummyimage.com/150x150/ffffff/222.jpg&text=Snkr+20',
     },
   },
 });
