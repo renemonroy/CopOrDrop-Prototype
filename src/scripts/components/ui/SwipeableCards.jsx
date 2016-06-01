@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Motion, spring } from 'react-motion';
-import { fastEaseOutElastic } from '../../constants/SpringPresets';
+import { fastEaseOutElastic, easeOut } from '../../constants/SpringPresets';
 let styles = null;
 
 class UISwipeableCards extends Component {
@@ -79,7 +79,7 @@ class UISwipeableCards extends Component {
       case 2:
         return { x: mouse, opacity: spring(0.8) };
       case 3:
-        return { x: spring(0, fastEaseOutElastic), opacity: 0 };
+        return { x: spring(0, easeOut), opacity: 0 };
       default:
         return { x: spring(0, fastEaseOutElastic), opacity: 1 };
     }
