@@ -44,11 +44,10 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  getCardStyles(x, opacity) {
+  getCardStyles(x) {
     const { limit, condition } = this.state;
     let deg = 0;
     let val = x;
-    let opac = opacity;
     switch (condition) {
       case 1:
         deg = val / 40;
@@ -61,13 +60,11 @@ class UISwipeableCards extends Component {
         break;
       default:
         val = 0;
-        opac = 1;
     }
     const transStyle = `translate3d(${val}px, 40px, 0) scale(1) rotate(${deg}deg)`;
     return {
       transform: transStyle,
       WebkitTransform: transStyle,
-      opacity: opac,
     };
   }
 
@@ -75,13 +72,13 @@ class UISwipeableCards extends Component {
     const { mouse, condition } = this.state;
     switch (condition) {
       case 1:
-        return { x: spring(0, fastEaseOutElastic), opacity: spring(1) };
+        return { x: spring(0, fastEaseOutElastic) };
       case 2:
-        return { x: mouse, opacity: spring(0.9) };
+        return { x: mouse };
       case 3:
-        return { x: spring(0, easeOut), opacity: 0 };
+        return { x: spring(0, easeOut) };
       default:
-        return { x: spring(0, fastEaseOutElastic), opacity: 1 };
+        return { x: spring(0, fastEaseOutElastic) };
     }
   }
 
@@ -176,14 +173,14 @@ class UISwipeableCards extends Component {
               style={this.animCard()}
               key={`ui-card-motion-${key}`}
             >
-              {({ x, opacity }) =>
+              {({ x }) =>
                 <div
                   onTouchStart={this.handleTouchStart.bind(this, x)}
                   onTouchMove={::this.handleTouchMove}
                   onTouchEnd={::this.handleTouchEnd}
                   key={key}
                   className={`ui-swipeable-card${condition !== 0 ? '' : ' ui-transition'}`}
-                  style={index === 0 ? this.getCardStyles(x, opacity) : cs[`st${index}`]}
+                  style={index === 0 ? this.getCardStyles(x) : cs[`st${index}`]}
                 >
                   {cardRenderer(from + index, index)}
                 </div>
