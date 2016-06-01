@@ -158,11 +158,17 @@ class UISwipeableCards extends Component {
   renderNavigation() {
     return (
       <div className="ui-swipeable-navigation">
-        <button className="discard-button" onClick={::this.handleDiscardClick}>
-          Discard
+        <button
+          className="discard-button bg-black border-grey"
+          onClick={::this.handleDiscardClick}
+        >
+          <i className="glyph g72-thumbs-down text-color-white"></i>
         </button>
-        <button className="accept-button" onClick={::this.handleAcceptClick}>
-          Accept
+        <button
+          className="accept-button bg-black border-grey"
+          onClick={::this.handleAcceptClick}
+        >
+          <i className="glyph g72-thumbs-up text-color-white"></i>
         </button>
       </div>
     );
