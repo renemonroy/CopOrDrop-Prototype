@@ -111,11 +111,12 @@ class UISwipeableCards extends Component {
   }
 
   restart(from, size) {
+    const ps = this.props;
     this.setState({
-      ...this.constrain(from, size, this.props),
+      ...this.constrain(from, size, ps),
       decision: 0,
       condition: 0,
-    });
+    }, () => { if (ps.onChange) ps.onChange(from); });
   }
 
   constrain(from, size, { length }) {
