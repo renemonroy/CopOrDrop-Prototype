@@ -61,7 +61,7 @@ class UISwipeableCards extends Component {
       default:
         val = 0;
     }
-    const transStyle = `translate3d(${val}px, 40px, 0) scale(1) rotate(${deg}deg)`;
+    const transStyle = `translate3d(${val}px, 32px, 0) scale(1) rotate(${deg}deg)`;
     return {
       transform: transStyle,
       WebkitTransform: transStyle,
@@ -203,20 +203,20 @@ class UISwipeableCards extends Component {
 styles = {
   card: {
     st1: {
-      transform: 'translate3d(0, 20px, 0) scale(0.95)',
-      WebkitTransform: 'translate3d(0, 20px, 0) scale(0.95)',
+      transform: 'translate3d(0, 16px, 0) scale(0.95)',
+      WebkitTransform: 'translate3d(0, 16px, 0) scale(0.95)',
     },
     st2: {
       transform: 'translate3d(0, 0px, 0) scale(0.9)',
       WebkitTransform: 'translate3d(0, 0px, 0) scale(0.9)',
     },
     st3: {
-      transform: 'translate3d(0, -20px, 0) scale(0.85)',
-      WebkitTransform: 'translate3d(0, -20px, 0) scale(0.85)',
+      transform: 'translate3d(0, -16px, 0) scale(0.85)',
+      WebkitTransform: 'translate3d(0, -16px, 0) scale(0.85)',
     },
     st4: {
-      transform: 'translate3d(0, -40px, 0) scale(0.8)',
-      WebkitTransform: 'translate3d(0, -40px, 0) scale(0.8)',
+      transform: 'translate3d(0, -32px, 0) scale(0.8)',
+      WebkitTransform: 'translate3d(0, -32px, 0) scale(0.8)',
     },
   },
 };
