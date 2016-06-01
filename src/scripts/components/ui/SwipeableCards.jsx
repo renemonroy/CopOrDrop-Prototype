@@ -143,6 +143,20 @@ class UISwipeableCards extends Component {
     this.decide();
   }
 
+  handleDiscardClick(e) {
+    e.preventDefault();
+    this.setState({ mouse: -this.state.limit, condition: 2 }, () => {
+      setTimeout(() => this.decide(), 0);
+    });
+  }
+
+  handleAcceptClick(e) {
+    e.preventDefault();
+    this.setState({ mouse: this.state.limit, condition: 2 }, () => {
+      setTimeout(() => this.decide(), 0);
+    });
+  }
+
   render() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size, condition } = this.state;
