@@ -6,9 +6,8 @@
     position: relative
 
   .ui-swipeable-card
-    background-color: #e7e7e7
+    background-color: #fff
     border-radius: .8rem
-    border-top: 1px solid #fff
     height: 100%
     left: 0
     overflow: hidden
@@ -20,21 +19,22 @@
     &.ui-transition
       transition: transform .3s
 
-  .discard-button
+  .ui-swipeable-navigation
     position: relative
     bottom: -4rem
-    left: 35%
-    margin-left: -2.5rem
-    width: 5rem
-    text-align: center
+    width: 100%
+    display: flex
+    justify-content: center
 
-  .accept-button
-    position: relative
-    bottom: -4rem
-    left: 55%
-    margin-left: -2.5rem
-    width: 5rem
-    text-align: center
+    .discard-button
+      width: 5rem
+      text-align: center
+      margin: 0 .5rem
+
+    .accept-button
+      width: 5rem
+      text-align: center
+      margin: 0 .5rem
 
   img
     min-width: 100%
