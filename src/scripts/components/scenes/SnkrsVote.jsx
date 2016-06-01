@@ -34,18 +34,31 @@ class SnkrsVoteScene extends Component {
     this.setState({ cardIndex: i });
   }
 
+  getTruncation(h) {
+    if (h < 350) {
+      return 70;
+    } else if (h < 420) {
+      return 140;
+    }
+    return 210;
+  }
+
   renderCard(i) {
-    const { id, title, assets } = this.snkrs[i];
+    const { id, title, subtitle, assets, description } = this.snkrs[i];
     return (
       <div className="snkr-card-content" id={`snkr-${id}`}>
         <img src={assets.default} role="presentation" />
-        <p>{title}</p>
+        <div className="pt3-sm pb3-sm prl4-sm u-align-center">
+          <h6 className="ncss-brand text-color-grey">{subtitle}</h6>
+          <h3 className="ncss-brand lh-h5 pb4-sm">{title}</h3>
+          <p>{_.truncate(description, { length: this.truncateLength })}</p>
+        </div>
       </div>
     );
   }
 
   renderBackground() {
-    const snkr = this.snkrs[this.state.cardIndex];
+    const snkr = this.snkrs[this.state.cardIndex] || this.snkrs[this.snkrs.lenght - 1];
     const bgStyl = {
       backgroundImage: `url('${snkr.assets.default}')`,
     };
@@ -60,7 +73,8 @@ class SnkrsVoteScene extends Component {
     const { snkrs } = this.props;
     const ratio = window.innerWidth / window.innerHeight;
     const cardWidth = window.innerWidth - 80; // 20px of padding in both sides
-    const cardHeight = (cardWidth / ratio) * 0.65;
+    const cardHeight = (cardWidth / ratio) * 0.8;
+    this.truncateLength = this.getTruncation(cardHeight);
     this.snkrs = _.map(snkrs, (val, k) => ({ ...val, id: parseInt(k, 10) }));
     return (
       <section className="snkrs-vote-scene">
