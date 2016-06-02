@@ -25,9 +25,9 @@ class SnkrsVoteScene extends Component {
 
   getTruncation(h) {
     if (h < 350) {
-      return { txtLength: 70, titlePT: 3, subtitlePB: 2 };
+      return { txtLength: 70, titlePT: 2, subtitlePB: 2 };
     } else if (h < 420) {
-      return { txtLength: 140, titlePT: 4, subtitlePB: 4 };
+      return { txtLength: 140, titlePT: 3, subtitlePB: 3 };
     }
     return { txtLength: 210, titlePT: 4, subtitlePB: 4 };
   }
