@@ -1,3 +1,4 @@
+require('./SwipeableCards.styl');
 import React, { Component, PropTypes } from 'react';
 import { Motion, spring } from 'react-motion';
 import { fastEaseOutElastic, easeOut } from '../../constants/SpringPresets';

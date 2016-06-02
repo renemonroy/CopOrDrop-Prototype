@@ -1,3 +1,4 @@
+require('./ui/index.styl');
 import React from 'react';
 import SnkrsVoteScene from './scenes/SnkrsVote.jsx';
 

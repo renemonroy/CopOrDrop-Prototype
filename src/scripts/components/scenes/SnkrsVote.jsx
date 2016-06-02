@@ -1,3 +1,4 @@
+require('./SnkrsVote.styl');
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import { UISwipeableCards } from '../ui';
