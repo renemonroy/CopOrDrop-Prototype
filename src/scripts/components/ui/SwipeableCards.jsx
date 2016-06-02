@@ -32,8 +32,8 @@ class UISwipeableCards extends Component {
     const maxSize = stackSize > 5 ? 5 : stackSize;
     this.state = {
       ...this.constrain(initialIndex, maxSize, this.props),
-      delta: 0,
-      mouse: 0,
+      delta: { x: 0 },
+      mouse: { x: 0 },
       limit: 160,
       decision: 0,
       condition: 0, // default: 0, isCancelling: 1, isDragging: 2, isLeaving: 3
@@ -45,24 +45,24 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  getCardStyles(x) {
+  getCardStyles({ x }) {
     const { limit, condition } = this.state;
     let deg = 0;
-    let val = x;
+    let posX = x;
     switch (condition) {
       case 1:
-        deg = val / 40;
+        deg = posX / 40;
         break;
       case 2:
-        deg = val / 40;
+        deg = posX / 40;
         break;
       case 3:
-        val = -(limit * 2);
+        posX = -(limit * 2);
         break;
       default:
-        val = 0;
+        posX = 0;
     }
-    const transStyle = `translate3d(${val}px, 32px, 0) scale(1) rotate(${deg}deg)`;
+    const transStyle = `translate3d(${posX}px, 32px, 0) scale(1) rotate(${deg}deg)`;
     return {
       transform: transStyle,
       WebkitTransform: transStyle,
@@ -75,7 +75,7 @@ class UISwipeableCards extends Component {
       case 1:
         return { x: spring(0, fastEaseOutElastic) };
       case 2:
-        return { x: mouse };
+        return mouse;
       case 3:
         return { x: spring(0, easeOut) };
       default:
@@ -99,12 +99,12 @@ class UISwipeableCards extends Component {
 
   decide() {
     const { mouse, limit } = this.state;
-    if (mouse >= limit) {
-      this.setState({ condition: 3, delta: 0, decision: 1 }, ::this.accept);
-    } else if (mouse <= -limit) {
-      this.setState({ condition: 3, delta: 0, decision: -1 }, ::this.discard);
+    if (mouse.x >= limit) {
+      this.setState({ condition: 3, delta: { x: 0 }, decision: 1 }, ::this.accept);
+    } else if (mouse.x <= -limit) {
+      this.setState({ condition: 3, delta: { x: 0 }, decision: -1 }, ::this.discard);
     } else {
-      this.setState({ condition: 1, delta: 0, decision: 0 });
+      this.setState({ condition: 1, delta: { x: 0 }, decision: 0 });
     }
   }
 
@@ -124,10 +124,10 @@ class UISwipeableCards extends Component {
     return { from: fromIndex, size: maxSize };
   }
 
-  handleTouchStart(pressX, e) {
+  handleTouchStart(pos, e) {
     this.setState({
-      delta: e.touches[0].pageX - pressX,
-      mouse: pressX,
+      delta: { x: e.touches[0].pageX - pos.x },
+      mouse: pos,
       condition: 2,
     });
   }
@@ -135,7 +135,11 @@ class UISwipeableCards extends Component {
   handleTouchMove(e) {
     e.preventDefault();
     const { condition, delta } = this.state;
-    if (condition === 2) this.setState({ mouse: e.touches[0].pageX - delta });
+    if (condition === 2) {
+      this.setState({
+        mouse: { x: e.touches[0].pageX - delta.x },
+      });
+    }
   }
 
   handleTouchEnd() {
@@ -144,14 +148,20 @@ class UISwipeableCards extends Component {
 
   handleDiscardClick(e) {
     e.preventDefault();
-    this.setState({ mouse: -this.state.limit, condition: 2 }, () => {
+    this.setState({
+      mouse: { x: -this.state.limit },
+      condition: 2,
+    }, () => {
       setTimeout(() => this.decide(), 0);
     });
   }
 
   handleAcceptClick(e) {
     e.preventDefault();
-    this.setState({ mouse: this.state.limit, condition: 2 }, () => {
+    this.setState({
+      mouse: { x: this.state.limit },
+      condition: 2,
+    }, () => {
       setTimeout(() => this.decide(), 0);
     });
   }
@@ -193,14 +203,14 @@ class UISwipeableCards extends Component {
               style={this.animCard()}
               key={`ui-card-motion-${key}`}
             >
-              {({ x }) =>
+              {(pos) =>
                 <div
-                  onTouchStart={this.handleTouchStart.bind(this, x)}
+                  onTouchStart={this.handleTouchStart.bind(this, pos)}
                   onTouchMove={::this.handleTouchMove}
                   onTouchEnd={::this.handleTouchEnd}
                   key={key}
                   className={`ui-swipeable-card${condition !== 0 ? '' : ' ui-transition'}`}
-                  style={index === 0 ? this.getCardStyles(x) : cs[`st${index}`]}
+                  style={index === 0 ? this.getCardStyles(pos) : cs[`st${index}`]}
                 >
                   {cardRenderer(from + index, index)}
                 </div>
