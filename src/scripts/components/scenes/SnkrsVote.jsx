@@ -29,7 +29,7 @@ class SnkrsVoteScene extends Component {
     if (h < 350) {
       return { imgHeight, imgWidth, txtLength: 70, titlePT: 2, subtitlePB: 2 };
     } else if (h < 420) {
-      return { imgHeight, imgWidth, txtLength: 140, titlePT: 4, subtitlePB: 3 };
+      return { imgHeight, imgWidth, txtLength: 140, titlePT: 3, subtitlePB: 3 };
     }
     return { imgHeight, imgWidth, txtLength: 210, titlePT: 4, subtitlePB: 4 };
   }
@@ -51,7 +51,6 @@ class SnkrsVoteScene extends Component {
     const { imgWidth, imgHeight, txtLength, titlePT, subtitlePB } = this.trunc;
     const cardImgStyl = {
       backgroundImage: `url('${assets.default}')`,
-      width: `${imgWidth}px`,
       height: `${imgHeight}px`,
     };
     return (
