@@ -25,11 +25,11 @@ class SnkrsVoteScene extends Component {
 
   getTruncation(h) {
     if (h < 350) {
-      return 70;
+      return { txtLength: 70, titlePT: 3, subtitlePB: 2 };
     } else if (h < 420) {
-      return 140;
+      return { txtLength: 140, titlePT: 4, subtitlePB: 4 };
     }
-    return 210;
+    return { txtLength: 210, titlePT: 4, subtitlePB: 4 };
   }
 
   discardCard(i) {
@@ -46,13 +46,14 @@ class SnkrsVoteScene extends Component {
 
   renderCard(i) {
     const { id, title, subtitle, assets, description } = this.snkrs[i];
+    const { txtLength, titlePT, subtitlePB } = this.trunc;
     return (
       <div className="snkr-card-content" id={`snkr-${id}`}>
         <img src={assets.default} role="presentation" />
-        <div className="pt3-sm pb3-sm prl4-sm u-align-center">
+        <div className={`pt${titlePT}-sm pb3-sm prl4-sm u-align-center`}>
           <h6 className="ncss-brand text-color-grey">{subtitle}</h6>
-          <h3 className="ncss-brand lh-h5 pb4-sm">{title}</h3>
-          <p>{_.truncate(description, { length: this.truncateLength })}</p>
+          <h3 className={`ncss-brand lh-h5 pb${subtitlePB}-sm`}>{title}</h3>
+          <p>{_.truncate(description, { length: txtLength })}</p>
         </div>
       </div>
     );
@@ -75,7 +76,7 @@ class SnkrsVoteScene extends Component {
     const ratio = window.innerWidth / window.innerHeight;
     const cardWidth = window.innerWidth - 80; // 20px of padding in both sides
     const cardHeight = (cardWidth / ratio) * 0.8;
-    this.truncateLength = this.getTruncation(cardHeight);
+    this.trunc = this.getTruncation(cardHeight);
     this.snkrs = _.map(snkrs, (val, k) => ({ ...val, id: parseInt(k, 10) }));
     return (
       <section className="snkrs-vote-scene">
