@@ -24,12 +24,14 @@ class SnkrsVoteScene extends Component {
   };
 
   getTruncation(h) {
+    const imgHeight = (h * 0.50);
+    const imgWidth = imgHeight / 0.7047; // aspect ratio
     if (h < 350) {
-      return { txtLength: 70, titlePT: 2, subtitlePB: 2 };
+      return { imgHeight, imgWidth, txtLength: 70, titlePT: 2, subtitlePB: 2 };
     } else if (h < 420) {
-      return { txtLength: 140, titlePT: 3, subtitlePB: 3 };
+      return { imgHeight, imgWidth, txtLength: 140, titlePT: 4, subtitlePB: 3 };
     }
-    return { txtLength: 210, titlePT: 4, subtitlePB: 4 };
+    return { imgHeight, imgWidth, txtLength: 210, titlePT: 4, subtitlePB: 4 };
   }
 
   discardCard(i) {
@@ -46,10 +48,15 @@ class SnkrsVoteScene extends Component {
 
   renderCard(i) {
     const { id, title, subtitle, assets, description } = this.snkrs[i];
-    const { txtLength, titlePT, subtitlePB } = this.trunc;
+    const { imgWidth, imgHeight, txtLength, titlePT, subtitlePB } = this.trunc;
+    const cardImgStyl = {
+      backgroundImage: `url('${assets.default}')`,
+      width: `${imgWidth}px`,
+      height: `${imgHeight}px`,
+    };
     return (
       <div className="snkr-card-content" id={`snkr-${id}`}>
-        <img src={assets.default} role="presentation" />
+        <div className="snkr-card-img" style={cardImgStyl}></div>
         <div className={`pt${titlePT}-sm pb3-sm prl4-sm u-align-center`}>
           <h6 className="ncss-brand text-color-grey">{subtitle}</h6>
           <h3 className={`ncss-brand lh-h5 pb${subtitlePB}-sm`}>{title}</h3>
@@ -61,9 +68,7 @@ class SnkrsVoteScene extends Component {
 
   renderBackground() {
     const snkr = this.snkrs[this.state.cardIndex] || this.snkrs[this.snkrs.lenght - 1];
-    const bgStyl = {
-      backgroundImage: `url('${snkr.assets.default}')`,
-    };
+    const bgStyl = { backgroundImage: `url('${snkr.assets.default}')` };
     return (
       <div className="snkrs-vote-bg" style={bgStyl}>
         <div className="snkrs-vote-overlay"></div>
@@ -72,6 +77,7 @@ class SnkrsVoteScene extends Component {
   }
 
   render() {
+    // 315x222 -> ratio = .7047
     const { snkrs } = this.props;
     const ratio = window.innerWidth / window.innerHeight;
     const cardWidth = window.innerWidth - 80; // 20px of padding in both sides
