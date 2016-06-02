@@ -52,10 +52,10 @@ class UISwipeableCards extends Component {
     const posY = y;
     switch (condition) {
       case 1:
-        deg = posX / 40;
+        deg = posY >= 32 ? -(posX / 40) : posX / 40;
         break;
       case 2:
-        deg = posX / 40;
+        deg = posY >= 32 ? -(posX / 40) : posX / 40;
         break;
       case 3:
         posX = -(limit * 2);
