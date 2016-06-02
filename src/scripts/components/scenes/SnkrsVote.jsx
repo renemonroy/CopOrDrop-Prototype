@@ -22,6 +22,15 @@ class SnkrsVoteScene extends Component {
     cardIndex: 0,
   };
 
+  getTruncation(h) {
+    if (h < 350) {
+      return 70;
+    } else if (h < 420) {
+      return 140;
+    }
+    return 210;
+  }
+
   discardCard(i) {
     console.log('>>> Snkr discarded:', this.snkrs[i]);
   }
@@ -32,15 +41,6 @@ class SnkrsVoteScene extends Component {
 
   handleChange(i) {
     this.setState({ cardIndex: i });
-  }
-
-  getTruncation(h) {
-    if (h < 350) {
-      return 70;
-    } else if (h < 420) {
-      return 140;
-    }
-    return 210;
   }
 
   renderCard(i) {
