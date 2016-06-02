@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import { UISwipeableCards } from '../ui';
 import { connect } from 'react-redux';
-require('../../../styles/scenes/SnkrsVote.styl');
 
 @connect(state => ({
   snkrs: state.Snkrs.toJS(),
