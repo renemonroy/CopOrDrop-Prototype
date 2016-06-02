@@ -32,8 +32,8 @@ class UISwipeableCards extends Component {
     const maxSize = stackSize > 5 ? 5 : stackSize;
     this.state = {
       ...this.constrain(initialIndex, maxSize, this.props),
-      delta: { x: 0 },
-      mouse: { x: 0 },
+      delta: { x: 0, y: 0 },
+      mouse: { x: 0, y: 32 },
       limit: 160,
       decision: 0,
       condition: 0, // default: 0, isCancelling: 1, isDragging: 2, isLeaving: 3
@@ -45,10 +45,11 @@ class UISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  getCardStyles({ x }) {
+  getCardStyles({ x, y }) {
     const { limit, condition } = this.state;
     let deg = 0;
     let posX = x;
+    const posY = y;
     switch (condition) {
       case 1:
         deg = posX / 40;
@@ -62,7 +63,7 @@ class UISwipeableCards extends Component {
       default:
         posX = 0;
     }
-    const transStyle = `translate3d(${posX}px, 32px, 0) scale(1) rotate(${deg}deg)`;
+    const transStyle = `translate3d(${posX}px, ${posY}px, 0) scale(1) rotate(${deg}deg)`;
     return {
       transform: transStyle,
       WebkitTransform: transStyle,
@@ -73,13 +74,13 @@ class UISwipeableCards extends Component {
     const { mouse, condition } = this.state;
     switch (condition) {
       case 1:
-        return { x: spring(0, fastEaseOutElastic) };
+        return { x: spring(0, fastEaseOutElastic), y: spring(32, fastEaseOutElastic) };
       case 2:
         return mouse;
       case 3:
-        return { x: spring(0, easeOut) };
+        return { x: spring(0, easeOut), y: 32 };
       default:
-        return { x: spring(0, fastEaseOutElastic) };
+        return { x: spring(0, fastEaseOutElastic), y: 32 };
     }
   }
 
@@ -100,11 +101,11 @@ class UISwipeableCards extends Component {
   decide() {
     const { mouse, limit } = this.state;
     if (mouse.x >= limit) {
-      this.setState({ condition: 3, delta: { x: 0 }, decision: 1 }, ::this.accept);
+      this.setState({ condition: 3, delta: { x: 0, y: 32 }, decision: 1 }, ::this.accept);
     } else if (mouse.x <= -limit) {
-      this.setState({ condition: 3, delta: { x: 0 }, decision: -1 }, ::this.discard);
+      this.setState({ condition: 3, delta: { x: 0, y: 32 }, decision: -1 }, ::this.discard);
     } else {
-      this.setState({ condition: 1, delta: { x: 0 }, decision: 0 });
+      this.setState({ condition: 1, delta: { x: 0, y: 32 }, decision: 0 });
     }
   }
 
@@ -126,7 +127,10 @@ class UISwipeableCards extends Component {
 
   handleTouchStart(pos, e) {
     this.setState({
-      delta: { x: e.touches[0].pageX - pos.x },
+      delta: {
+        x: e.touches[0].pageX - pos.x,
+        y: e.touches[0].pageY - pos.y,
+      },
       mouse: pos,
       condition: 2,
     });
@@ -137,7 +141,10 @@ class UISwipeableCards extends Component {
     const { condition, delta } = this.state;
     if (condition === 2) {
       this.setState({
-        mouse: { x: e.touches[0].pageX - delta.x },
+        mouse: {
+          x: e.touches[0].pageX - delta.x,
+          y: e.touches[0].pageY - delta.y,
+        },
       });
     }
   }
@@ -149,7 +156,7 @@ class UISwipeableCards extends Component {
   handleDiscardClick(e) {
     e.preventDefault();
     this.setState({
-      mouse: { x: -this.state.limit },
+      mouse: { x: -this.state.limit, y: 0 },
       condition: 2,
     }, () => {
       setTimeout(() => this.decide(), 0);
@@ -159,7 +166,7 @@ class UISwipeableCards extends Component {
   handleAcceptClick(e) {
     e.preventDefault();
     this.setState({
-      mouse: { x: this.state.limit },
+      mouse: { x: this.state.limit, y: 0 },
       condition: 2,
     }, () => {
       setTimeout(() => this.decide(), 0);
