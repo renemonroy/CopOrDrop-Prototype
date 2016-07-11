@@ -48,7 +48,7 @@ class SnkrsVoteScene extends Component {
 
   renderCard(i) {
     const { id, title, subtitle, assets, description } = this.snkrs[i];
-    const { imgWidth, imgHeight, txtLength, titlePT, subtitlePB } = this.trunc;
+    const { imgHeight, txtLength, titlePT, subtitlePB } = this.trunc;
     const cardImgStyl = {
       backgroundImage: `url('${assets.default}')`,
       height: `${imgHeight}px`,
